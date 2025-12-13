@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>엔믹스 단어장</title>
+    <style>
+        :root {
+            --primary: #00A6DE;
+            --bg: #f4f6f8;
+            --card-bg: #ffffff;
+            --link-color: #007bff;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            /* 하단 footer에 가려지지 않도록 패딩 추가 */
+            padding-bottom: 50px; 
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* 검색창 스타일 */
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            outline: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 166, 222, 0.2);
+        }
+
+        /* 결과 리스트 스타일 */
+        .result-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--primary);
+        }
+
+        .word-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .word-desc {
+            font-size: 0.95rem;
+            color: #555;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .word-desc a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .word-desc a:hover {
+            text-decoration: underline;
+        }
+
+        /* 구분선 스타일 */
+        .divider {
+            display: flex;
+            align-items: center;
+            color: #999;
+            font-size: 0.85rem;
+            margin: 20px 0;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px dashed #ccc;
+        }
+        
+        .divider span {
+            padding: 0 10px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        /* [수정됨] 하단 고정 Footer 스타일 */
+        .footer {
+            position: fixed; /* 화면에 고정 */
+            bottom: 15px;    /* 바닥에서 15px 띄움 */
+            left: 0;
+            width: 100%;     /* 전체 너비 */
+            text-align: center;
+            font-size: 0.75rem; /* 작게 */
+            color: #aaa;        /* 회색 */
+            pointer-events: none; /* 글씨 위로 마우스 클릭이 통과되도록 */
+            z-index: 100;    /* 다른 요소보다 위에 보이도록 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>엔믹스 단어장</h1>
+    
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+    </div>
+
+    <div id="resultContainer" class="result-list">
+        <div class="loading">데이터를 불러오는 중...</div>
+    </div>
+</div>
+
+<div class="footer">by 엔믹서기</div>
+
+<script>
+    let dictionaryData = {};
+    let wordList = [];
+
+
+    fetch('word.json')
+        .then(response => response.json())
+        .then(data => {
+            dictionaryData = data;
+            wordList = Object.keys(data); 
+            document.querySelector('.loading').innerText = "검색어를 입력해주세요.";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.querySelector('.loading').innerText = "데이터 로드 실패";
+        });
+
+    // damerau-Levenshtein 구현
+    function damerauLevenshtein(source, target) {
+        if (!source) return target ? target.length : 0;
+        if (!target) return source ? source.length : 0;
+
+        const sourceLength = source.length;
+        const targetLength = target.length;
+        const matrix = [];
+
+        for (let i = 0; i <= sourceLength; i++) {
+            matrix[i] = [i];
+        }
+        for (let j = 0; j <= targetLength; j++) {
+            matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= sourceLength; i++) {
+            for (let j = 1; j <= targetLength; j++) {
+                let cost = (source[i - 1] === target[j - 1]) ? 0 : 1;
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j - 1] + cost
+                );
+                if (i > 1 && j > 1 && source[i - 1] === target[j - 2] && source[i - 2] === target[j - 1]) {
+                    matrix[i][j] = Math.min(matrix[i][j], matrix[i - 2][j - 2] + cost);
+                }
+            }
+        }
+        return matrix[sourceLength][targetLength];
+    }
+
+    // 3. 검색 알고리즘
+    function tagSearch(query, n = 3) {
+        if (!query) return [];
+        const queryLower = query.toLowerCase().replace(/\s+/g, '');
+        const scores = [];
+
+        wordList.forEach(word => {
+            const wordLower = word.toLowerCase().replace(/\s+/g, '');
+            const distance = damerauLevenshtein(queryLower, wordLower);
+            scores.push({ word: word, distance: distance });
+        });
+
+        scores.sort((a, b) => a.distance - b.distance);
+        return scores.slice(0, n);
+    }
+
+
+    function linkify(text) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, function(url) {
+            return `<a href="${url}" target="_blank">${url}</a>`;
+        });
+    }
+
+    function createCardHTML(item) {
+        const rawDesc = dictionaryData[item.word] || "설명이 없습니다.";
+        const formattedDesc = linkify(rawDesc);
+        
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+            <div class="word-title">${item.word}</div>
+            <div class="word-desc">${formattedDesc}</div>
+        `;
+        return div;
+    }
+
+    const input = document.getElementById('searchInput');
+    const container = document.getElementById('resultContainer');
+
+    input.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        container.innerHTML = '';
+
+        if (query.length === 0) {
+            container.innerHTML = '<div class="loading">검색어를 입력해주세요.</div>';
+            return;
+        }
+
+        const results = tagSearch(query, 3);
+
+        if (results.length === 0) {
+            container.innerHTML = '<div class="loading">결과가 없습니다.</div>';
+            return;
+        }
+
+        // 첫 번째 결과
+        container.appendChild(createCardHTML(results[0]));
+
+        // 나머지 결과
+        if (results.length > 1) {
+            const divider = document.createElement('div');
+            divider.className = 'divider';
+            divider.innerHTML = '<span>연관 검색어</span>';
+            container.appendChild(divider);
+
+            for (let i = 1; i < results.length; i++) {
+                container.appendChild(createCardHTML(results[i]));
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
