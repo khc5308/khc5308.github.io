@@ -239,7 +239,7 @@ input[type="text"]:focus {
     transform: translateX(-50%);
     background: #333;
     color: white;
-    padding: 15px 30px;
+    padding: 15px 40px;
     border-radius: 50px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     display: flex;
@@ -247,9 +247,8 @@ input[type="text"]:focus {
     justify-content: space-between;
     gap: 20px;
     
-    /* 중요: 푸터(z-index: 9999)보다 높아야 가려지지 않음 */
     z-index: 10000; 
-    margin: 20px auto;
+    margin: 20px 20px;
     width: 90%;
     max-width: 400px;
     cursor: pointer;
