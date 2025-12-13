@@ -1,0 +1,445 @@
+/* =========================================
+   1. 기본 설정 (Variables & Base)
+   ========================================= */
+:root {
+    /* 통합 컬러: 차분한 블루 (#4D7CE3) */
+    --primary: #4D7CE3; 
+    --bg: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --gray-light: #eee;
+    --link-color: #007bff;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+    padding-bottom: 80px; /* 하단 푸터/플로팅바 공간 확보 */
+    box-sizing: border-box;
+    
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* =========================================
+   2. 레이아웃 & 공통 컴포넌트
+   ========================================= */
+.container {
+    margin: 40px auto;
+}
+
+/* 페이지별 컨테이너 폭 조절 */
+.container.main-layout { max-width: 800px; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+.container.shop-layout { max-width: 800px; }
+.container.word-layout { max-width: 600px; }
+
+/* 공통 검색창 스타일 */
+.search-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 50px;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(77, 124, 227, 0.2);
+}
+
+/* 공통 푸터 */
+.footer {
+    position: fixed;       
+    bottom: 0;             
+    left: 0;
+    width: 100%;
+    height: 40px;          
+    line-height: 40px;    
+    text-align: center;
+    font-size: 0.8rem;
+    color: #aaa;            
+    background-color: var(--bg); 
+    z-index: 9999;         
+}
+
+/* =========================================
+   3. 메인 페이지 (index.html) 전용
+   ========================================= */
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.sub-title {
+    color: #666;
+    font-size: 1rem;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.menu-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(77, 124, 227, 0.15);
+    border-color: var(--primary);
+}
+
+.icon-box {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: #f0f4ff;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.menu-card:hover .icon-box {
+    background: var(--primary);
+    color: white;
+}
+
+.text-box h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.text-box p {
+    margin: 0;
+    color: #777;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.arrow-icon {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    font-size: 1.5rem;
+    color: #ddd;
+    transition: all 0.3s;
+}
+
+.menu-card:hover .arrow-icon {
+    color: var(--primary);
+    transform: translateX(5px);
+}
+
+/* =========================================
+   4. 쇼핑몰 페이지 (shop.html) 전용
+   ========================================= */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+/* 쇼핑몰 카드 스타일 */
+.product-grid .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-grid .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+}
+
+.card-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: var(--gray-light);
+}
+
+.price {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.btn-add {
+    margin-top: auto;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+    background-color: var(--primary);
+}
+
+/* 장바구니 하단 플로팅 바 */
+/* 장바구니 하단 플로팅 바 수정 */
+.cart-summary {
+    position: fixed;
+    bottom: 60px; /* 푸터(40px)와의 간격을 위해 50px -> 60px로 올림 */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    
+    /* 중요: 푸터(z-index: 9999)보다 높아야 가려지지 않음 */
+    z-index: 10000; 
+    
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+
+.cart-summary:active {
+    transform: translateX(-50%) scale(0.98);
+}
+
+.total-price {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* 장바구니 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 11000;
+    display: none;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.modal-overlay.open { display: flex; }
+
+.cart-modal {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    height: 80vh;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;
+}
+
+.btn-close {
+    background: none; border: none; font-size: 1.5rem; cursor: pointer;
+}
+
+.cart-list { flex: 1; overflow-y: auto; }
+
+.cart-item {
+    display: flex; align-items: center; padding: 15px 0;
+    border-bottom: 1px solid #f5f5f5; transition: opacity 0.3s;
+}
+
+.cart-item.inactive { opacity: 0.5; }
+
+.cart-item img {
+    width: 60px; height: 60px; border-radius: 8px;
+    object-fit: cover; margin: 0 15px; background: #eee;
+}
+
+.item-info { flex: 1; }
+.item-name { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
+.item-price { color: #666; font-size: 0.9rem; }
+.item-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+.qty-wrapper {
+    display: flex; align-items: center; background: #f0f0f0; border-radius: 6px;
+}
+
+.qty-btn {
+    width: 28px; height: 28px; border: none; background: none;
+    cursor: pointer; font-weight: bold; color: #555;
+}
+.qty-btn:hover { color: var(--primary); }
+.qty-display { width: 30px; text-align: center; font-size: 0.9rem; font-weight: 600; }
+
+input[type="checkbox"] {
+    width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;
+}
+
+/* 삭제 버튼 (X) 스타일 */
+.btn-delete {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 5px 5px 5px;
+    margin-left: auto; /* 오른쪽 정렬 */
+    transition: color 0.2s;
+}
+
+.btn-delete:hover {
+    color: #ff4d4f; /* 호버 시 빨간색 */
+}
+
+/* [UX 개선] 수량 조절 버튼 스타일 디테일 */
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    transition: all 0.2s; /* 부드러운 전환 효과 */
+    border-radius: 4px;
+}
+
+.qty-btn:hover {
+    background-color: rgba(0,0,0,0.05); /* 호버 시 살짝 배경색 */
+    color: var(--primary);
+}
+
+.qty-btn:disabled {
+    opacity: 0.2;          /* 아주 흐리게 */
+    cursor: not-allowed;   /* 금지 커서 */
+    color: #999;           /* 회색으로 변경 */
+    pointer-events: none;  /* 클릭 자체를 물리적으로 차단 */
+}
+
+/* 수량이 0일 때 가격을 회색으로 처리하는 클래스 */
+.item-price.zero {
+    color: #ccc;
+    text-decoration: line-through; /* 선택사항: 취소선 효과 */
+}
+
+/* =========================================
+   5. 용어집 페이지 (glossary.html) 전용
+   ========================================= */
+.result-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 용어집 카드 스타일 */
+.result-list .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid transparent; /* 왼쪽 포인트 컬러 */
+    transition: transform 0.2s;
+}
+
+.result-list .card:hover {
+    transform: translateY(-2px);
+    border-left-color: var(--primary);
+}
+
+.word-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.word-desc {
+    font-size: 0.95rem;
+    color: #555;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    word-break: break-word;
+    margin-bottom: 0;
+}
+
+.word-desc a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+.word-desc a:hover { text-decoration: underline; }
+
+.info-message {
+    text-align: center; color: #888; margin-top: 40px; font-size: 1rem;
+}

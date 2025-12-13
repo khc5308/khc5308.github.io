@@ -3,141 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>엔믹스 단어장</title>
-    <link rel="stylesheet" href="style.css">
+    <title>메인 메뉴</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>엔믹스 단어장</h1>
-    
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+    <div class="container main-layout">
+        <div class="header-section">
+            <h1 class="main-title">서비스 선택</h1>
+            <p class="sub-title">원하시는 서비스를 선택해주세요.</p>
+        </div>
+
+        <div class="menu-grid">
+            <a href="shop.html" class="menu-card">
+                <div class="icon-box">🛍️</div>
+                <div class="text-box">
+                    <h2>장바구니</h2>
+                    <p>5만원 특전을 맞춰보세요.<br>현재 상품 : &ltEPISODE 1: ZERO FRONTIER&gt;</p>
+                </div>
+                <div class="arrow-icon">→</div>
+            </a>
+
+            <a href="word.html" class="menu-card">
+                <div class="icon-box">📚</div>
+                <div class="text-box">
+                    <h2>용어집</h2>
+                    <p>엔믹스 관련 용어의<br>설명을 찾아보세요.</p>
+                </div>
+                <div class="arrow-icon">→</div>
+            </a>
+        </div>
     </div>
 
-    <div id="resultContainer" class="result-list">
-        <div class="info-message">데이터를 불러오는 중...</div>
-    </div>
-</div>
-
-<div class="footer">by 엔믹서기</div>
-
-<script>
-
-    const CHO = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
-    const JUNG = ["ㅏ","ㅐ","ㅑ","ㅒ","ㅓ","ㅔ","ㅕ","ㅖ","ㅗ","ㅘ","ㅙ","ㅚ","ㅛ","ㅜ","ㅝ","ㅞ","ㅟ","ㅠ","ㅡ","ㅢ","ㅣ"];
-    const JONG = ["","ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ","ㅁ","ㅂ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
-
-    let dictionaryData = {};
-    let searchIndex = []; 
-
-
-    function decomposeHangul(text) {
-        let result = "";
-        for (let i = 0; i < text.length; i++) {
-            const charCode = text.charCodeAt(i);
-            if (charCode >= 0xAC00 && charCode <= 0xD7A3) {
-                const code = charCode - 0xAC00;
-                const jongIndex = code % 28;
-                const jungIndex = Math.floor(code / 28) % 21;
-                const choIndex = Math.floor(code / 28 / 21);
-
-                result += CHO[choIndex] + JUNG[jungIndex];
-                if (jongIndex > 0) {
-                    result += JONG[jongIndex];
-                }
-            } else {
-                result += text[i]; 
-            }
-        }
-        return result;
-    }
-
-    
-    fetch('word.json')
-        .then(response => response.json())
-        .then(data => {
-            dictionaryData = data;
-            const keys = Object.keys(data).sort(); 
-
-            searchIndex = keys.map(word => ({
-                word: word,
-                jamo: decomposeHangul(word.replace(/\s+/g, '').toLowerCase())
-            }));
-
-            renderAll();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.querySelector('.info-message').innerText = "데이터 로드 실패";
-        });
-
-    
-    function tagSearch(query) {
-        if (!query) return [];
-        const queryJamo = decomposeHangul(query.replace(/\s+/g, '').toLowerCase());
-        
-        const matches = searchIndex.filter(item => {
-            return item.jamo.startsWith(queryJamo);
-        });
-
-        return matches.map(item => ({ word: item.word }));
-    }
-
-
-    function linkify(text) {
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        return text.replace(urlRegex, function(url) {
-            return `<a href="${url}" target="_blank">${url}</a>`;
-        });
-    }
-
-   
-    function createCardHTML(item) {
-        const rawDesc = dictionaryData[item.word] || "설명이 없습니다.";
-        const formattedDesc = linkify(rawDesc);
-        
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-            <div class="word-title">${item.word}</div>
-            <div class="word-desc">${formattedDesc}</div>
-        `;
-        return div;
-    }
-
-    function renderAll() {
-        const container = document.getElementById('resultContainer');
-        container.innerHTML = '';
-        searchIndex.forEach(item => {
-            container.appendChild(createCardHTML(item));
-        });
-    }
-
-    const input = document.getElementById('searchInput');
-    const container = document.getElementById('resultContainer');
-
-    input.addEventListener('input', (e) => {
-        const query = e.target.value.trim();
-        container.innerHTML = '';
-
-        if (query.length === 0) {
-            renderAll();
-            return;
-        }
-
-        const results = tagSearch(query);
-
-        if (results.length === 0) {
-            container.innerHTML = '<div class="info-message">검색 결과가 없습니다.</div>';
-            return;
-        }
-
-        results.forEach(item => {
-            container.appendChild(createCardHTML(item));
-        });
-    });
-</script>
+    <div class="footer">by 엔믹서기</div>
 
 </body>
 </html>

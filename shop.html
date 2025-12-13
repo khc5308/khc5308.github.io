@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+    <div class="container shop-layout">
+        <h1>쇼핑 리스트</h1>
+
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="상품 이름 검색...">
+        </div>
+
+        <div class="product-grid" id="product-list">
+            </div>
+        
+        <div class="info-message" id="no-result" style="display: none; text-align: center; color: #888;">
+            검색 결과가 없습니다.
+        </div>
+    </div>
+
+    <div class="cart-summary" onclick="openCartModal()">
+        <div>
+            <span style="font-size: 0.9rem;">▲ 장바구니 상세</span>
+            <div class="cart-count" style="font-weight: bold; margin-top: 4px;">0개 선택됨</div>
+        </div>
+        <div>
+            <span class="total-price">0</span>원
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cart-modal">
+        <div class="cart-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 style="margin:0; font-size:1.4rem;">내 장바구니</h2>
+                <button class="btn-close" onclick="closeCartModal()">✕</button>
+            </div>
+            
+            <div class="cart-list" id="cart-items-container"></div>
+
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span>총 결제 금액</span>
+                    <div><span class="total-price" id="modal-total-price">0</span>원</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">by 엔믹서기</div>
+
+    <script src="static/script.js"></script>
+    <script src="static/shop.js"></script>
+</body>
+</html>
