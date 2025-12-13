@@ -9,7 +9,7 @@
 }
 
 body {
-    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-family: 'Pretendard';
     background-color: var(--bg);
     margin: 0;
     padding: 20px;
@@ -234,23 +234,29 @@ input[type="text"]:focus {
 /* 장바구니 하단 플로팅 바 수정 */
 .cart-summary {
     position: fixed;
-    bottom: 60px; /* 푸터(40px)와의 간격을 위해 50px -> 60px로 올림 */
+    bottom: 60px; 
     left: 50%;
     transform: translateX(-50%);
+    
+    width: calc(100% - 40px); 
+    max-width: 400px;
+    
+    /* 패딩이 너비를 더 늘리지 않도록 안전장치 추가 */
+    box-sizing: border-box; 
+
     background: #333;
     color: white;
     padding: 15px 40px;
     border-radius: 50px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
     
     z-index: 10000; 
-    margin: 20px 20px;
-    width: 90%;
-    max-width: 400px;
+    
     cursor: pointer;
     transition: transform 0.2s;
 }
