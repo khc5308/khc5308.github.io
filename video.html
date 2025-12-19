@@ -270,17 +270,17 @@
     // 1. 데이터 로드 (JSON으로 변경)
     // ============================
     async function init() {
-        try {
-            // hashTag.txt 대신 hashTag.json을 불러옵니다.
+        try {   
             const [jsonRes, channelRes, keywordRes] = await Promise.all([
                 fetch('/data/nmixx_new.json'),
                 fetch('/data/channels.txt'),
                 fetch('/data/hashTag.json') 
             ]);
 
-            if (!jsonRes.ok || !channelRes.ok || !keywordRes.ok) {
-                throw new Error('파일 로딩 실패');
-            }
+            // 에러 확인: 어떤 파일이 200 OK가 아닌지 체크
+            if (!jsonRes.ok) throw new Error(`영상 데이터 로드 실패 (${jsonRes.status})`);
+            if (!channelRes.ok) throw new Error(`채널 데이터 로드 실패 (${channelRes.status})`);
+            if (!keywordRes.ok) throw new Error(`키워드 데이터 로드 실패 (${keywordRes.status})`);
 
             videoData = await jsonRes.json();
             
