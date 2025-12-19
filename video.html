@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>영상 검색 서비스 - 파일 연동</title>
+    <title>영상 검색 서비스 - 카테고리 분류</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     
     <style>
@@ -37,22 +37,13 @@
         }
 
         /* --- 검색창 --- */
-        .search-wrapper {
-            margin-bottom: 20px;
-        }
-
+        .search-wrapper { margin-bottom: 20px; }
         input[type="text"].main-search {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 1.1rem;
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            outline: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s;
+            width: 100%; padding: 16px 20px; font-size: 1.1rem;
+            border: 2px solid #ddd; border-radius: 50px; outline: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s;
             box-sizing: border-box;
         }
-
         input[type="text"].main-search:focus {
             border-color: var(--primary);
             box-shadow: 0 4px 12px rgba(77, 124, 227, 0.2);
@@ -60,244 +51,139 @@
 
         /* --- 필터 섹션 --- */
         .filter-section {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            background: white; padding: 25px; border-radius: 16px;
+            margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
-        .filter-group {
-            margin-bottom: 20px;
-        }
+        .filter-group { margin-bottom: 20px; }
         .filter-group:last-child { margin-bottom: 0; }
-
+        
         .filter-label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #444;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-            display: block;
+            font-size: 0.85rem; font-weight: 800; color: #444;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 10px; display: block;
         }
 
-        /* 태그 컨테이너 */
-        .tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+        /* --- 아코디언 스타일 (New) --- */
+        .accordion-container {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        
+        .category-item {
+            border: 1px solid #eee; border-radius: 8px; overflow: hidden;
         }
 
+        .category-header {
+            background: #fff; padding: 12px 16px; cursor: pointer;
+            font-size: 0.95rem; font-weight: 700; color: #555;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: background 0.2s;
+        }
+        .category-header:hover { background: #f9f9f9; color: var(--primary); }
+        .category-header::after {
+            content: '▼'; font-size: 0.7rem; color: #999; transition: transform 0.3s;
+        }
+        /* 펼쳐졌을 때 화살표 회전 */
+        .category-item.active .category-header::after { transform: rotate(180deg); }
+
+        .category-content {
+            display: none; /* 기본 숨김 */
+            padding: 15px; background: #fafafa; border-top: 1px solid #eee;
+        }
+        .category-item.active .category-content { display: block; }
+
+        /* 태그 버튼 */
+        .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .tag-btn {
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #e0e0e0;
-            background: var(--tag-bg);
-            color: #555;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
+            padding: 6px 14px; border-radius: 20px; border: 1px solid #e0e0e0;
+            background: var(--tag-bg); color: #555; cursor: pointer;
+            font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
         }
-
-        .tag-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: white;
-        }
-
+        .tag-btn:hover { border-color: var(--primary); color: var(--primary); background: white; }
         .tag-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            font-weight: 600;
-            box-shadow: 0 2px 6px rgba(77, 124, 227, 0.3);
+            background: var(--primary); color: white; border-color: var(--primary);
+            font-weight: 600; box-shadow: 0 2px 6px rgba(77, 124, 227, 0.3);
         }
-
-        /* Shorts 태그 특별 스타일 */
-        .tag-btn.shorts-tag {
-            border-color: #ff0000;
-            color: #ff0000;
-            background: #fff0f0;
-        }
-        .tag-btn.shorts-tag.active {
-            background: #ff0000;
-            color: white;
-        }
+        
+        /* Shorts 태그 */
+        .tag-btn.shorts-tag { border-color: #ff0000; color: #ff0000; background: #fff0f0; }
+        .tag-btn.shorts-tag.active { background: #ff0000; color: white; }
 
         /* 날짜 입력 */
-        .date-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .date-container { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         input.date-input {
-            width: 140px;
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: 'Pretendard';
-            color: #555;
-            outline: none;
-            font-size: 0.95rem;
-            text-align: center;
+            width: 140px; padding: 10px 14px; border: 1px solid #ddd;
+            border-radius: 8px; font-family: 'Pretendard'; color: #555;
+            outline: none; font-size: 0.95rem; text-align: center;
         }
         input.date-input:focus { border-color: var(--primary); }
-
         .date-separator { color: #999; font-weight: bold; }
-
+        
         .btn-reset {
-            margin-left: auto;
-            background: #f0f0f0;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: #666;
+            margin-left: auto; background: #f0f0f0; border: none; padding: 6px 12px;
+            border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: #666;
         }
         .btn-reset:hover { background: #e0e0e0; }
 
-        .divider {
-            border: 0; 
-            border-top: 1px dashed #ddd; 
-            margin: 20px 0;
-        }
+        .divider { border: 0; border-top: 1px dashed #ddd; margin: 20px 0; }
 
-        /* --- 검색 결과 카운트 --- */
+        /* 검색 결과 */
         .result-info {
-            display: flex;
-            justify-content: flex-end; /* 오른쪽 정렬 */
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #555;
-            font-size: 0.95rem;
+            display: flex; justify-content: flex-end; margin-bottom: 15px;
+            font-weight: 600; color: #555; font-size: 0.95rem;
         }
-        .result-count-num {
-            color: var(--primary);
-            margin-left: 4px;
-            font-weight: 700;
-        }
+        .result-count-num { color: var(--primary); margin-left: 4px; font-weight: 700; }
 
-        /* --- 카드 리스트 --- */
+        /* 카드 리스트 */
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 20px;
         }
-
         .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border: 2px solid transparent;
+            background: var(--card-bg); border-radius: 12px; padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 2px solid transparent;
             transition: transform 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
+            display: flex; flex-direction: column; text-decoration: none;
         }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-        }
-
+        .card:hover { transform: translateY(-4px); border-color: var(--primary); }
         .image-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: var(--gray-light);
+            position: relative; width: 100%; aspect-ratio: 16/9; margin-bottom: 12px;
+            border-radius: 8px; overflow: hidden; background-color: var(--gray-light);
         }
-
-        .card-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
+        .card-image { width: 100%; height: 100%; object-fit: cover; display: block; }
         .duration-badge {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            line-height: 1;
+            position: absolute; bottom: 8px; right: 8px;
+            background-color: rgba(0, 0, 0, 0.8); color: #fff;
+            padding: 3px 6px; border-radius: 4px;
+            font-size: 0.75rem; font-weight: 600; line-height: 1;
         }
-
         .video-title {
-            font-size: 1rem;
-            font-weight: bold;
-            margin: 0 0 5px 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.4;
-            height: 2.8em; 
-            color: #222;
+            font-size: 1rem; font-weight: bold; margin: 0 0 5px 0;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; line-height: 1.4; height: 2.8em; color: #222;
         }
-
         .video-meta {
-            font-size: 0.85rem;
-            color: #777;
-            margin: 0 0 10px 0;
-            display: flex;
-            justify-content: space-between;
+            font-size: 0.85rem; color: #777; margin: 0 0 10px 0;
+            display: flex; justify-content: space-between;
         }
-        
-        .channel-badge {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
+        .channel-badge { color: var(--primary); font-weight: 600; }
         .card-tags {
-            margin-bottom: 10px;
-            font-size: 0.75rem;
-            color: #888;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            margin-bottom: 10px; font-size: 0.75rem; color: #888;
+            overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
         }
-
         .btn-add {
-            margin-top: auto;
-            width: 100%;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+            margin-top: auto; width: 100%; padding: 10px;
+            background-color: #333; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600;
             transition: background-color 0.2s;
         }
         .btn-add:hover { background-color: var(--primary); }
-
         .no-result {
-            text-align: center;
-            width: 100%;
-            grid-column: 1 / -1;
-            padding: 50px 0;
-            color: #888;
+            text-align: center; width: 100%; grid-column: 1 / -1;
+            padding: 50px 0; color: #888;
         }
-
         .footer {
-            text-align: center;
-            margin-top: 50px;
-            color: #aaa;
-            font-size: 0.8rem;
+            text-align: center; margin-top: 50px; color: #aaa; font-size: 0.8rem;
         }
     </style>
 </head>
@@ -321,7 +207,7 @@
 
             <div class="filter-group">
                 <span class="filter-label">Keywords & Type</span>
-                <div class="tag-container" id="keywordList">
+                <div class="accordion-container" id="keywordList">
                     </div>
             </div>
 
@@ -340,7 +226,7 @@
             </div>
         </div>
 
-        <div class="result-info" id="resultCountArea">
+        <div class="result-info">
             검색 결과 <span class="result-count-num" id="resultCount">0</span>개
         </div>
 
@@ -351,6 +237,256 @@
         </footer>
     </div>
 
-    <script src="static/video.js"> </script>
+<script>
+    // 전역 변수
+    let videoData = [];
+    let channelTags = []; 
+    let keywordData = {}; // JSON 객체로 변경됨
+
+    // DOM 요소
+    const videoListContainer = document.getElementById('videoList');
+    const searchInput = document.getElementById('searchInput');
+    const channelListContainer = document.getElementById('channelList');
+    const keywordListContainer = document.getElementById('keywordList'); // 아코디언 들어갈 곳
+    const resultCountSpan = document.getElementById('resultCount');
+    const dateStartInput = document.getElementById('dateStart');
+    const dateEndInput = document.getElementById('dateEnd');
+    const resetDateBtn = document.getElementById('resetDate');
+
+    // 필터 상태
+    let activeChannels = []; 
+    let activeKeywords = []; 
+
+    // 시간 파싱 (MM:SS -> 초)
+    function parseDurationToSeconds(durationStr) {
+        if(!durationStr) return 0;
+        const parts = durationStr.split(':').map(Number);
+        if (parts.length === 2) return parts[0] * 60 + parts[1];
+        if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+        return 0;
+    }
+
+    // ============================
+    // 1. 데이터 로드 (JSON으로 변경)
+    // ============================
+    async function init() {
+        try {
+            // hashTag.txt 대신 hashTag.json을 불러옵니다.
+            const [jsonRes, channelRes, keywordRes] = await Promise.all([
+                fetch('/data/nmixx_new.json'),
+                fetch('/data/channels.txt'),
+                fetch('/data/hashTag.json') 
+            ]);
+
+            if (!jsonRes.ok || !channelRes.ok || !keywordRes.ok) {
+                throw new Error('파일 로딩 실패');
+            }
+
+            videoData = await jsonRes.json();
+            
+            const channelText = await channelRes.text();
+            channelTags = channelText.split('\n').map(s => s.trim()).filter(s => s !== '');
+
+            // JSON 파싱
+            keywordData = await keywordRes.json();
+
+            createFilterTags();
+            applyFilters();
+
+        } catch (error) {
+            console.error("Data Load Error:", error);
+            videoListContainer.innerHTML = '<div class="no-result">데이터 로딩 중 오류 발생</div>';
+        }
+    }
+
+    // ============================
+    // 2. 태그 및 아코디언 생성
+    // ============================
+    function createFilterTags() {
+        // A. 채널 태그 (기존 동일)
+        channelTags.forEach(channel => {
+            const btn = document.createElement('button');
+            btn.className = 'tag-btn';
+            btn.textContent = channel;
+            btn.onclick = () => toggleFilter(channel, btn, 'channel');
+            channelListContainer.appendChild(btn);
+        });
+
+        // B. 키워드 태그 (JSON 카테고리별 아코디언 생성)
+        // keywordData는 { "카테고리명": ["태그1", "태그2"], ... } 형태
+        for (const [categoryName, tags] of Object.entries(keywordData)) {
+            
+            // 1. 카테고리 아이템 박스
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item';
+
+            // 2. 헤더 (클릭 시 열림/닫힘)
+            const header = document.createElement('div');
+            header.className = 'category-header';
+            header.textContent = categoryName; // 예: "NMIXX 멤버"
+            header.onclick = () => {
+                categoryItem.classList.toggle('active'); // active 클래스 토글
+            };
+
+            // 3. 내용 영역 (태그 버튼들)
+            const content = document.createElement('div');
+            content.className = 'category-content';
+            
+            // 태그 버튼 컨테이너 (flex wrap)
+            const tagWrapper = document.createElement('div');
+            tagWrapper.className = 'tag-container';
+
+            tags.forEach(tag => {
+                const btn = document.createElement('button');
+                // #Shorts, #Short 등 특정 태그에 포인트 컬러 주기
+                if (tag === '#Shorts' || tag === '#Short') {
+                    btn.className = 'tag-btn shorts-tag';
+                } else {
+                    btn.className = 'tag-btn';
+                }
+                
+                // 버튼 텍스트에서 # 제거하고 싶으면 tag.replace('#','') 사용
+                btn.textContent = tag; 
+                btn.onclick = () => toggleFilter(tag, btn, 'keyword');
+                tagWrapper.appendChild(btn);
+            });
+
+            content.appendChild(tagWrapper);
+            categoryItem.appendChild(header);
+            categoryItem.appendChild(content);
+            
+            // 메인 컨테이너에 추가
+            keywordListContainer.appendChild(categoryItem);
+        }
+
+        // 첫 번째 카테고리는 기본으로 열어두기 (선택사항)
+        if(keywordListContainer.firstChild) {
+            keywordListContainer.firstChild.classList.add('active');
+        }
+    }
+
+    // ============================
+    // 3. 필터 로직
+    // ============================
+    function toggleFilter(value, btnElement, type) {
+        let targetArray = type === 'channel' ? activeChannels : activeKeywords;
+
+        if (targetArray.includes(value)) {
+            if (type === 'channel') activeChannels = activeChannels.filter(t => t !== value);
+            else activeKeywords = activeKeywords.filter(t => t !== value);
+            btnElement.classList.remove('active');
+        } else {
+            if (type === 'channel') activeChannels.push(value);
+            else activeKeywords.push(value);
+            btnElement.classList.add('active');
+        }
+        applyFilters();
+    }
+
+    function isValidDate(dateString) {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regex.test(dateString)) return false;
+        const date = new Date(dateString);
+        return !isNaN(date.getTime());
+    }
+
+    function applyFilters() {
+        const keyword = searchInput.value.toLowerCase();
+        const startDateStr = dateStartInput.value.trim();
+        const endDateStr = dateEndInput.value.trim();
+
+        const filtered = videoData.filter(video => {
+            // 1. 제목 검색
+            const matchText = video.title.toLowerCase().includes(keyword);
+
+            // 2. 채널 필터
+            const matchChannel = activeChannels.length === 0 || activeChannels.includes(video.channel_title);
+
+            // 3. 키워드 필터
+            let matchKeyword = true;
+            if (activeKeywords.length > 0) {
+                matchKeyword = activeKeywords.some(activeKey => {
+                    // Shorts 특수 처리 (120초 미만)
+                    if (activeKey === '#Shorts' || activeKey === '#Short' || activeKey === 'Shorts') {
+                         // 태그가 직접 있거나, 혹은 시간이 짧으면 인정할 것인지? 
+                         // 여기서는 해시태그 일치 여부 OR 시간 체크 둘 다 허용
+                         const isShortTime = parseDurationToSeconds(video.duration) < 120;
+                         const hasTag = video.hashtags && (video.hashtags.includes('#Shorts') || video.hashtags.includes('#Short'));
+                         return isShortTime || hasTag;
+                    } else {
+                        // 일반 해시태그
+                        return video.hashtags && video.hashtags.includes(activeKey);
+                    }
+                });
+            }
+
+            // 4. 날짜 필터
+            const videoDate = new Date(video.publish_date);
+            let matchDate = true;
+            if (isValidDate(startDateStr)) matchDate = matchDate && (videoDate >= new Date(startDateStr));
+            if (isValidDate(endDateStr)) matchDate = matchDate && (videoDate <= new Date(endDateStr));
+
+            return matchText && matchChannel && matchKeyword && matchDate;
+        });
+
+        updateResultCount(filtered.length);
+        renderVideos(filtered);
+    }
+
+    function updateResultCount(count) {
+        resultCountSpan.textContent = count;
+    }
+
+    function renderVideos(videos) {
+        videoListContainer.innerHTML = '';
+        if (videos.length === 0) {
+            videoListContainer.innerHTML = '<div class="no-result">조건에 맞는 영상이 없습니다.</div>';
+            return;
+        }
+
+        videos.forEach(video => {
+            let videoUrl = video.url || video.link || "";
+            const tagsStr = video.hashtags ? video.hashtags.join(' ') : '';
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="image-wrapper">
+                    <img src="${video.thumbnail_url}" class="card-image" alt="thumbnail">
+                    <span class="duration-badge">${video.duration}</span>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">${video.title}</h3>
+                    <div class="video-meta">
+                        <span class="channel-badge">${video.channel_title}</span>
+                        <span>${video.publish_date}</span>
+                    </div>
+                    ${tagsStr ? `<div class="card-tags">${tagsStr}</div>` : ''}
+                </div>
+                <button class="btn-add" onclick="playVideo('${videoUrl}')">시청하기</button>
+            `;
+            videoListContainer.appendChild(card);
+        });
+    }
+
+    function playVideo(url) {
+        if (!url || url === 'undefined' || url.trim() === '') {
+            alert("영상 주소가 없습니다.");
+            return;
+        }
+        window.open(url, '_blank');
+    }
+
+    // 이벤트 리스너
+    searchInput.addEventListener('input', applyFilters);
+    dateStartInput.addEventListener('input', applyFilters);
+    dateEndInput.addEventListener('input', applyFilters);
+    resetDateBtn.addEventListener('click', () => {
+        dateStartInput.value = ''; dateEndInput.value = ''; applyFilters();
+    });
+
+    // 실행
+    init();
+</script>
 </body>
 </html>
