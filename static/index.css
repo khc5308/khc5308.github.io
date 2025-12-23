@@ -1,0 +1,88 @@
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.sub-title {
+    color: #666;
+    font-size: 1rem;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.menu-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(77, 124, 227, 0.15);
+    border-color: var(--primary);
+}
+
+.icon-box {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: #f0f4ff;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.menu-card:hover .icon-box {
+    background: var(--primary);
+    color: white;
+}
+
+.text-box h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.text-box p {
+    margin: 0;
+    color: #777;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.arrow-icon {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    font-size: 1.5rem;
+    color: #ddd;
+    transition: all 0.3s;
+}
+
+.menu-card:hover .arrow-icon {
+    color: var(--primary);
+    transform: translateX(5px);
+}

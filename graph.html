@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMIXXER - 그래프</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/graph.css">
+</head>
+<body>
+
+    <div class="container main-layout">
+        
+        <div class="main-nav">
+            <button class="nav-btn active" onclick="switchMainTab('sales')">초동 판매량</button>
+            <button class="nav-btn" onclick="switchMainTab('compass')">음악 분류</button>
+        </div>
+
+
+        <div id="section-sales" class="tab-content active">
+            <div class="header-section">
+                <h1 class="main-title">초동 판매량</h1>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">총 발매 앨범</div>
+                    <div class="stat-value">8장</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">커리어하이</div>
+                    <div class="stat-value">103만장</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">최신 앨범</div>
+                    <div class="stat-value">Blue Valentine</div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label">Sales Graph</div>
+                <div class="chart-controls">
+                    <div class="sub-btn-group">
+                        <button class="sub-mode-btn active" onclick="setChartMode('total', this)">앨범별 추이</button>
+                        <button class="sub-mode-btn" onclick="setChartMode('daily', this)">일차별 상세</button>
+                    </div>
+                    <select id="albumSelector" class="album-select" onchange="updateDailyChart(this.value)">
+                        </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="section-compass" class="tab-content">
+            <div class="header-section">
+                <h1 class="main-title">음악 분류</h1>
+            </div>
+
+            <div class="filter-section" style="background: #fafafa; overflow: hidden; padding-bottom: 0;">
+                <div class="venn-container-2">
+                    <div class="circle-zone zone-left">
+                        <div class="zone-label">웅장<br><span>(Performance)</span></div>
+                    </div>
+                    <div class="circle-zone zone-right">
+                        <div class="zone-label">감성<br><span>(Melody)</span></div>
+                    </div>
+
+                    <div class="song-tag t-left p1">O.O</div>
+                    <div class="song-tag t-left p2">占 (TANK)</div>
+                    <div class="song-tag t-left p3">BOOM</div>
+                    <div class="song-tag t-left p4">Game Face</div>
+
+                    <div class="song-tag t-right p1">Cool (Your rainbow)</div>
+                    <div class="song-tag t-right p2">My Gosh</div>
+                    <div class="song-tag t-right p3">FEIFEI (蜚蜚)</div>
+                    <div class="song-tag t-right p4">Kiss</div>
+
+                    <div class="song-tag t-center p2">DASH</div>
+                    <div class="song-tag t-center p3">Roller Coaster</div>
+                    <div class="song-tag t-center p4">Love Me Like This</div>
+                    <div class="song-tag t-center p5">별별별 (See that?)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            by 엔믹서기
+        </div>
+    </div>
+
+    <script src="static/graph.js"></script>
+</body>
+</html>
