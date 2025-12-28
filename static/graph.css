@@ -1,0 +1,210 @@
+.main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    background: #eef2f6;
+    padding: 5px;
+    border-radius: 12px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #777;
+    transition: all 0.2s;
+}
+
+.nav-btn.active {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tab-content { display: none; animation: fadeIn 0.3s ease-out; }
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chart-wrapper { position: relative; height: 400px; width: 100%; }
+@media (max-width: 600px) { .chart-wrapper { height: 300px; } }
+
+.chart-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; }
+.sub-btn-group { display: flex; gap: 5px; background: #f0f0f0; padding: 4px; border-radius: 8px; }
+
+.sub-mode-btn {
+    border: none; background: transparent; padding: 8px 16px; border-radius: 6px;
+    cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #666; transition: all 0.2s;
+}
+.sub-mode-btn.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+.album-select { padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; outline: none; display: none; font-family: 'Pretendard'; }
+.album-select.show { display: block; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+.stat-card { background: #f8f9fa; border-radius: 12px; padding: 15px; text-align: center; }
+.stat-label { font-size: 0.85rem; color: #666; margin-bottom: 5px; }
+.stat-value { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+
+
+/* =========================================
+   3. 벤다이어그램 스타일 (2-Circle: Performance vs Melody)
+   ========================================= */
+.venn-container-2 {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 500px;
+    margin: 40px auto;
+    /* 모바일 대응 축소 */
+}
+
+/* 배경 원 스타일 */
+.circle-zone {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    mix-blend-mode: multiply; /* 색상 겹침 효과 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* 왼쪽 원 (강성) - 붉은 계열 */
+.zone-left {
+    left: 5%;
+    background-color: rgba(255, 71, 87, 0.15); /* 연한 빨강 */
+    border: 2px solid rgba(255, 71, 87, 0.5);
+}
+
+/* 오른쪽 원 (감성) - 파란 계열 */
+.zone-right {
+    right: 5%;
+    background-color: rgba(46, 134, 222, 0.15); /* 연한 파랑 */
+    border: 2px solid rgba(46, 134, 222, 0.5);
+}
+
+/* 라벨 스타일 */
+.zone-label {
+    position: absolute;
+    font-weight: 900;
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(0,0,0,0.05); /* 은은한 배경 글씨 */
+    text-transform: uppercase;
+    user-select: none;
+    z-index: 0;
+}
+.zone-left .zone-label { left: 20px; text-align: left; }
+.zone-right .zone-label { right: 20px; text-align: right; }
+.zone-label span { font-size: 1rem; letter-spacing: 2px; }
+
+
+/* 노래 태그 공통 스타일 */
+.song-tag {
+    position: absolute;
+    font-weight: 700;
+    font-size: 0.75rem;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    cursor: pointer;
+    z-index: 10;
+    text-align: center;
+    color: #444;
+    white-space: nowrap;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.3s;
+    border: 1px solid #eee;
+}
+
+.song-tag span {
+    display: block;
+    font-size: 0.7em;
+    font-weight: 400;
+    color: #888;
+    margin-top: 2px;
+    transition: color 0.2s;
+}
+
+/* Hover 효과: 제자리에서 커짐 + 색상 변화 */
+.song-tag:hover {
+    transform: scale(1.2); /* 기존 1.2보다 조금 더 키움 */
+    z-index: 100;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-color: transparent;
+}
+.song-tag:hover span { color: rgba(255,255,255,0.9); }
+
+/* 왼쪽 그룹 (강성) Hover - 빨강 */
+.t-left:hover { background: #ff4757; color: #fff; }
+
+/* 오른쪽 그룹 (감성) Hover - 파랑 */
+.t-right:hover { background: #2e86de; color: #fff; }
+
+/* ★ 교집합 그룹 (벅차오름) Hover - 그라데이션 ★ */
+.t-center:hover { 
+    background: linear-gradient(135deg, #ff4757, #2e86de); /* 빨강+파랑 그라데이션 */
+    color: #fff; 
+}
+
+
+/* === 위치 지정 (Positioning) === */
+/* 중앙 (교집합) - 세로로 배치 */
+.t-center { left: 50%; transform: translateX(-50%); }
+.t-center:hover { transform: translateX(-50%) scale(1.25); } /* hover시 중앙 정렬 유지하며 확대 */
+
+.t-center.p1 { top: 15%; z-index: 15; border-color: #a29bfe; } /* Run For Roses 강조 */
+.t-center.p2 { top: 28%; }
+.t-center.p3 { top: 39%; }
+.t-center.p4 { top: 50%; }
+.t-center.p5 { top: 61%; }
+.t-center.p6 { top: 72%; }
+.t-center.p7 { top: 83%; font-size: 0.8rem; }
+
+/* 왼쪽 (강성) */
+.t-left { left: 18%; }
+.t-left:hover { transform: translateX(-20%) scale(1.25); } /* hover시 살짝 왼쪽으로 */
+.t-left.p1 { top: 25%; }
+.t-left.p2 { top: 40%; left: 20%; } /* TANK는 더 왼쪽으로 */
+.t-left.p3 { top: 55%; }
+.t-left.p4 { top: 70%; }
+.t-left.p5 { top: 82%; left: 22%; font-size: 0.8rem; }
+
+/* 오른쪽 (감성) */
+.t-right { right: 18%; }
+.t-right:hover { transform: translateX(20%) scale(1.25); } /* hover시 살짝 오른쪽으로 */
+.t-right.p1 { top: 30%; }
+.t-right.p2 { top: 45%; right: 20%; }
+.t-right.p3 { top: 60%; }
+.t-right.p4 { top: 75%; right: 25%; font-size: 0.8rem; }
+
+
+/* 모바일 반응형 */
+@media (max-width: 650px) {
+    .venn-container-2 { 
+        transform: scale(0.65); 
+        transform-origin: top center; 
+        margin-bottom: -150px; 
+        height: 600px;
+    }
+    .circle-zone { width: 300px; height: 300px; }
+    .zone-left { left: 0; }
+    .zone-right { right: 0; }
+    .song-tag { padding: 6px 10px; font-size: 0.85rem; }
+}

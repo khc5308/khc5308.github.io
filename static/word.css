@@ -1,0 +1,50 @@
+.result-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 용어집 카드 스타일 */
+.result-list .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-left: 5px solid transparent; /* 왼쪽 포인트 컬러 */
+    transition: transform 0.2s;
+}
+
+.result-list .card:hover {
+    transform: translateY(-2px);
+    border-left-color: var(--primary);
+}
+
+.word-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.word-desc {
+    font-size: 0.95rem;
+    color: #555;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    word-break: break-word;
+    margin-bottom: 0;
+}
+
+.word-desc a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+.word-desc a:hover { text-decoration: underline; }
+
+.info-message {
+    text-align: center; color: #888; margin-top: 40px; font-size: 1rem;
+}
